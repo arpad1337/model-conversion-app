@@ -1,10 +1,14 @@
 import { Controller } from './controller'
-import { HomeController } from './home'
+import { NetworkStatusController } from './network-status'
+import { ExportableModelController } from './exportable-model'
 
 export * from './controller'
-export * from './home'
+export * from './network-status'
 export const controllerMapping = new Map<string, Controller>([
     [
-        'home', HomeController.instance
+        'network-status', NetworkStatusController.instance
+    ],
+    [
+        'exportable-model', ExportableModelController.instance
     ]
 ])

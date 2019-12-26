@@ -3,14 +3,37 @@ module.exports = {
     staticPath: './static',
     middlewares: [
         'extract-ip',
-        'logging'
+        'logging',
+        'error-handler'
     ],
     routes: [
+        
         {
             method: 'GET',
-            path: '/',
-            controller: 'home',
-            action: 'index'
+            path: '/v1/echo',
+            controller: 'network-status',
+            action: 'echo'
+        },
+        
+        {
+            method: 'GET',
+            path: '/v1/models',
+            controller: 'exportable-model',
+            action: 'getAll'
+        },
+        {
+            method: 'GET',
+            path: '/v1/models/:id',
+            controller: 'exportable-model',
+            action: 'getByID'
+        },
+        {
+            method: 'POST',
+            path: '/v1/models',
+            controller: 'exportable-model',
+            action: 'createNewModel',
+            middlewares: ['multipart-parser']
         }
+
     ]
 }

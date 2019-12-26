@@ -1,7 +1,8 @@
 import * as express from 'express'
 import { Application, Request, Response } from 'express'
 import { controllerMapping } from './controllers'
-import { Middleware, middlewareMapping } from './middlewares'
+import { middlewareMapping } from './middlewares'
+import { DatabaseProvider } from './providers'
 
 export type HTTPMethod = 'GET' | 'POST'| 'PUT'
 
@@ -46,7 +47,7 @@ export default class App {
 
     private bindRoutes(): void {
         this.routes.forEach((route: Route) => {
-            let handlers = [controllerMapping.get(route.controller)[route.action]];
+            let handlers = [controllerMapping.get(route.controller)[route.action].bind(controllerMapping.get(route.controller))];
             if (route.middlewares) {
                 const middlewares = []
                 route.middlewares.forEach((middleware: string) => {
@@ -54,15 +55,19 @@ export default class App {
                 })
                 handlers = middlewares.concat(handlers)
             }
-            this.app[route.method.toLowerCase()](route.path, handlers)
+            this.app[route.method.toLowerCase()](route.path, ...handlers)
         })
     }
 
-    listen(): void {
+    public listen(): void {
         this.setup()
         this.app.listen(this.port, "0.0.0.0", () => {
             console.log('Application listening on port', this.port)
         })
+    }
+
+    public onExit() {
+        DatabaseProvider.instance.commit();
     }
 
 }
