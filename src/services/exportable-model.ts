@@ -2,7 +2,7 @@ import { DatabaseProvider } from '../providers/database'
 import { FileFormat } from 'model-conversion-async/src/lib/file-converter'
 import * as crypto from 'crypto'
 
-export type FileStatus = 'waiting' | 'in-progress' | 'processed'
+export type FileStatus = 'waiting' | 'in-progress' | 'processed' | 'error'
 
 export interface ExportableModel {
     inputFile: string
@@ -10,6 +10,7 @@ export interface ExportableModel {
     outputFile: string
     format: FileFormat
     status: FileStatus
+    id: string
 }
 
 export class ExportableModelService {
@@ -39,19 +40,24 @@ export class ExportableModelService {
         return this.databaseProvider.getFromSchemaByID(ExportableModelService.COLLECTION_ID, id)as ExportableModel
     }
 
-    public createFile(inputFile: string, format: FileFormat): ExportableModel {
+    public createModel(inputFile: string, format: FileFormat): ExportableModel {
         const outputFile = crypto.createHash("sha256")
             .update(inputFile + (new Date()).toISOString)
             .digest("hex") + '.' + format
         const model: ExportableModel = {
             format: format,
             inputFile: inputFile,
-            outputFile: outputFile,
+            outputFile: './static/exports/' + outputFile,
             progress: 0,
-            status: 'waiting'
+            status: 'waiting',
+            id: null
         }
         this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model)
         return model
+    }
+
+    public updateModel(model: ExportableModel): void {
+        return this.databaseProvider.updateByIdInSchema(ExportableModelService.COLLECTION_ID, model)
     }
 
     static get instance(): ExportableModelService {
