@@ -4,6 +4,7 @@ COPY . .
 
 RUN npm install 
 RUN npm run build
+RUN npm run test
 
 EXPOSE 1337
 
