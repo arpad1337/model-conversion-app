@@ -1,4 +1,4 @@
-# Model Conversion App [![Build Status](https://travis-ci.org/arpad1337/model-conversion-app.svg?branch=master)](https://travis-ci.org/arpad1337/model-conversion-app)
+# Model Conversion App [![Build Status](https://travis-ci.com/arpad1337/model-conversion-app.svg?branch=master)](https://travis-ci.com/arpad1337/model-conversion-app)
 
 ## Prerequisites
 
