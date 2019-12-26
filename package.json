@@ -23,6 +23,7 @@
     "@types/node": "^13.1.1",
     "express": "^4.17.1",
     "mocha": "^6.2.2",
+    "model-conversion-async": "git+https://github.com/arpad1337/model-conversion-async.git",
     "typescript": "^3.7.4"
   }
 }
