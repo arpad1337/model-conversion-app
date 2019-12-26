@@ -1,6 +1,7 @@
 import { Controller } from './controller'
 import { Request, Response } from 'express'
 import { ExportableModelService } from '../services/exportable-model';
+import { APIError } from '../utils';
 
 export class ExportableModelController extends Controller {
 
@@ -24,9 +25,19 @@ export class ExportableModelController extends Controller {
         res.end()
     }
 
-    createNewModel(req: Request, res: Response) {
+    createNewModel(req: Request, res: Response, next: Function) {
         const inputFile = req['files'].inputFile[0].path
         const format = req['fields'].format[0]
+        switch(format) {
+            case 'obj':
+            case 'step':
+            case 'iges':
+            case 'stl': {
+                break;
+            }
+            default: 
+                throw new APIError('Unknown format', 1001)
+        }
         const model = this.exportableModelService.createFile(inputFile, format)
         res.send(model)
         res.end()

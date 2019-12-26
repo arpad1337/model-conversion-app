@@ -3,6 +3,7 @@ import { Application, Request, Response } from 'express'
 import { controllerMapping } from './controllers'
 import { middlewareMapping } from './middlewares'
 import { DatabaseProvider } from './providers'
+import { ErrorHandlerMiddleware } from './middlewares'
 
 export type HTTPMethod = 'GET' | 'POST'| 'PUT'
 
@@ -40,9 +41,11 @@ export default class App {
     private setup(): void {
         this.app.use(express.static(this.staticPath))
         this.middlewares.forEach((middleware: string) => {
-            this.app.use(middlewareMapping.get(middleware).handle)
+            this.app.use(middlewareMapping.get(middleware).handle.bind(middlewareMapping.get(middleware)))
         })
         this.bindRoutes()
+        const errorHandler = new ErrorHandlerMiddleware()
+        this.app.use(errorHandler.handle.bind(errorHandler))
     }
 
     private bindRoutes(): void {
@@ -51,7 +54,7 @@ export default class App {
             if (route.middlewares) {
                 const middlewares = []
                 route.middlewares.forEach((middleware: string) => {
-                    middlewares.push(middlewareMapping.get(middleware).handle)
+                    middlewares.push(middlewareMapping.get(middleware).handle.bind(middlewareMapping.get(middleware)))
                 })
                 handlers = middlewares.concat(handlers)
             }

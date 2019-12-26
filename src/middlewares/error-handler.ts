@@ -1,17 +1,15 @@
-import { Middleware } from './middleware'
 import { Request, Response } from 'express'
+import { APIError } from '../utils'
 
-export class ErrorHandlerMiddleware extends Middleware {
+export class ErrorHandlerMiddleware {
 
-    handle(req: Request, res: Response, next: Function) {
-        try {
-            next() 
-        } catch(e) {
-            res.send({
-                error: e.message
-            })
-            res.end()
-        }
+    /* 
+     * The Express Framework unfortunatelly uses runtime method signature check when 
+     * hooking into this middleware as default error handler. No workaround exists
+     */
+    handle(error: APIError, _: Request, res: Response, _2: Function) {
+        res.send(error)
+        res.end()
     }
 
 }

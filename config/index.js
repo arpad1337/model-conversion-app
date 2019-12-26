@@ -3,8 +3,7 @@ module.exports = {
     staticPath: './static',
     middlewares: [
         'extract-ip',
-        'logging',
-        'error-handler'
+        'logging'
     ],
     routes: [
         

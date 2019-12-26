@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
-export class Middleware {
+export interface MiddlewareHandler {
+    (req: Request, res: Response, next: Function): void | Promise<any>
+}
 
-    handle(req: Request, res: Response, next: Function) {
-        next()
-    }
-
+export interface Middleware {
+    handle: MiddlewareHandler
 }
