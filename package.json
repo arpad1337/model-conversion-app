@@ -1,0 +1,28 @@
+{
+  "name": "model-conversion-app",
+  "version": "1.0.0",
+  "description": "Frontend and API around the Model Conversion Async CLI",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --module commonjs --target ES5 --outDir ./dist ./src/*.ts",
+    "start": "node index.js",
+    "test": "mocha test/**.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arpad1337/model-conversion-app.git"
+  },
+  "author": "@rpi1337",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/arpad1337/model-conversion-app/issues"
+  },
+  "homepage": "https://github.com/arpad1337/model-conversion-app#readme",
+  "dependencies": {
+    "@types/express": "^4.17.2",
+    "@types/node": "^13.1.1",
+    "express": "^4.17.1",
+    "mocha": "^6.2.2",
+    "typescript": "^3.7.4"
+  }
+}
