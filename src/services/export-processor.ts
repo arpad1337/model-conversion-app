@@ -89,7 +89,7 @@ export class ExportProcessorService extends EventEmitter {
         this.processes.delete(id)
     }
 
-    static get instance(): ExportProcessorService {
+    public static get instance(): ExportProcessorService {
         if (!this.singleton) {
             this.singleton = new ExportProcessorService(processProvider)
             this.singleton.startPolling()

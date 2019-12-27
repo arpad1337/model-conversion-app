@@ -88,7 +88,7 @@ export class DatabaseProvider {
         fs.writeFileSync(`./${DatabaseProvider.STORAGE_FILE_NAME}.json`, JSON.stringify(this.DB))
     }
 
-    static get instance(): DatabaseProvider {
+    public static get instance(): DatabaseProvider {
         if (!this.singleton) {
             this.singleton = new DatabaseProvider()
             this.singleton.initialize()

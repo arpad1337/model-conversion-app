@@ -66,7 +66,7 @@ export class ExportableModelService {
         this.databaseProvider.deleteFromSchemaById(ExportableModelService.COLLECTION_ID, id)
     }
 
-    static get instance(): ExportableModelService {
+    public static get instance(): ExportableModelService {
         if (!this.singleton) {
             const databaseProvider = DatabaseProvider.instance
             this.singleton = new ExportableModelService(databaseProvider)

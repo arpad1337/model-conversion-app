@@ -5,7 +5,7 @@ import { middlewareMapping } from './middlewares'
 import { DatabaseProvider } from './providers'
 import { ErrorHandlerMiddleware } from './middlewares'
 
-export type HTTPMethod = 'GET' | 'POST'| 'PUT'
+export type HTTPMethod = 'GET' | 'POST'| 'PUT' | 'DELETE'
 
 export interface Route {
     method: HTTPMethod
