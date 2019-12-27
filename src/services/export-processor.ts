@@ -64,6 +64,7 @@ export class ExportProcessorService extends EventEmitter {
                 return
             }
             this.emit('modelProcessingFailure', model)
+            this.terminateProcess(model.id)
         })
         process.stdout.on('data', (fragment: any) => {
             const data = fragment.toString()
@@ -76,10 +77,11 @@ export class ExportProcessorService extends EventEmitter {
         })
         process.stderr.on('data', () => {
             this.emit('modelProcessingFailure', model)
-            process.kill()
+            this.terminateProcess(model.id)
         })
         process.on('error', () => {
             this.emit('modelProcessingFailure', model)
+            this.terminateProcess(model.id)
         })
     }
 
