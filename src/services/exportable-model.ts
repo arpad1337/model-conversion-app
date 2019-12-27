@@ -23,10 +23,9 @@ export class ExportableModelService {
 
     constructor(databaseProvider: DatabaseProvider) {
         this.databaseProvider = databaseProvider
-        this.setup()
     }
 
-    private setup() {
+    public setup() {
         if (!this.databaseProvider.isSchemaExists(ExportableModelService.COLLECTION_ID)) {
             this.databaseProvider.createSchema(ExportableModelService.COLLECTION_ID)
             this.databaseProvider.commit()
@@ -70,6 +69,7 @@ export class ExportableModelService {
         if (!this.singleton) {
             const databaseProvider = DatabaseProvider.instance
             this.singleton = new ExportableModelService(databaseProvider)
+            this.singleton.setup()
         }
         return this.singleton
     }
