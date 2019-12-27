@@ -72,10 +72,9 @@ function ExportableModelsList() {
 function AddModelForm({ onNewModel }) {
     const { Form, InputGroup, Button, Row, Col, Alert } = ReactBootstrap;
 
-    const [newModel, setNewModel] = React.useState({
-        inputFile: null,
-        format: 'obj'
-    });
+    const [newModelFile, setNewModelFile] = React.useState(null);
+    const [newModelFormat, setNewModelFormat] = React.useState('obj');
+
     const [submitting, setSubmitting] = React.useState(false);
 
     const [error, setError] = React.useState(null)
@@ -94,10 +93,10 @@ function AddModelForm({ onNewModel }) {
     const submitNewModel = e => {
         e.preventDefault();
         setSubmitting(true);
-        setError(null)
+        setError(null);
         const formData = new FormData();
-        formData.set('inputFile', newModel.inputFile);
-        formData.set('format', newModel.format);
+        formData.set('inputFile', newModelFile);
+        formData.set('format', newModelFormat);
         fetch('/v1/models', {
             method: 'POST',
             body: formData
@@ -107,10 +106,7 @@ function AddModelForm({ onNewModel }) {
             .then(model => {
                 onNewModel(model);
                 setSubmitting(false);
-                setNewModel({
-                    inputFile: null,
-                    type: 'obj'
-                });
+                setNewModelFile(null);
             })
             .catch((error) => {
                 console.error(error.message);
@@ -119,10 +115,7 @@ function AddModelForm({ onNewModel }) {
 
     const onFileSelected = e => {
         e.preventDefault();
-        setNewModel({
-            ...newModel,
-            inputFile: e.target.files[0]
-        })
+        setNewModelFile(e.target.files[0]);
     }
 
     const getErrorBox = () => {
@@ -132,16 +125,15 @@ function AddModelForm({ onNewModel }) {
         return '';
     }
 
+    let fileInput;
+
     return (
         <Form onSubmit={submitNewModel} className="upload-model">
             <Form.Group as={Row}>
                 <Form.Label column sm="3">Desired format</Form.Label>
                 <Col sm="9">
                     <Form.Control as="select"
-                        onChange={e => setNewModel({
-                            ...newModel,
-                            format: e.target.value
-                        })}
+                        onChange={e => setNewModelFormat(e.target.value)}
                     >
                         <option>obj</option>
                         <option>step</option>
@@ -157,7 +149,7 @@ function AddModelForm({ onNewModel }) {
                     column 
                     sm="10"
                     offset="2"
-                    type="file" 
+                    type="file"
                     onChange={e => onFileSelected(e)}
                     placeholder="Convertable file"
                     aria-describedby="basic-addon1"
@@ -168,7 +160,7 @@ function AddModelForm({ onNewModel }) {
                 <Button
                     type="submit"
                     variant="success"
-                    disabled={!newModel.inputFile}
+                    disabled={!newModelFile}
                     className={submitting ? 'disabled' : ''}
                 >
                     {submitting ? 'Uploading...' : 'Upload model'}
