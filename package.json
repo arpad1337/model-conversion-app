@@ -4,7 +4,7 @@
   "description": "Frontend and API around the Model Conversion Async CLI",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --module commonjs --target ES5 --outDir ./dist ./src/**/*.ts",
+    "build": "tsc --module commonjs --target ES5 --outDir ./dist ./src/*.ts",
     "start": "node index.js",
     "test": "mocha test/**.spec.js"
   },

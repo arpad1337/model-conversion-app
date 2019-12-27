@@ -4,7 +4,12 @@ const App = require('./dist').default
 if (require && require.main === module) { 
 
     const app = new App(config)
-    app.listen()
+    app.listen((err) => {
+        if (err) {
+            console.error(err)
+            process.exit(1)
+        }
+    })
 
     const onExit = () => {
         app.onExit()

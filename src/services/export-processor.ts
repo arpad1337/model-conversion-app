@@ -10,7 +10,7 @@ export interface Process extends EventEmitter {
 }
 
 export interface ProcessProvider {
-    spawn: (process: string, args?: string[]) => Process
+    execFile: (process: string, args?: string[], options?: any) => Process
 }
 
 export class ExportProcessorService extends EventEmitter {
@@ -45,9 +45,15 @@ export class ExportProcessorService extends EventEmitter {
 
     private startProcessing(model: ExportableModel): void {
         console.log('SPAWNING PROCESS')
-        const process = this.processProvider.spawn(
-            'cd '+ path.resolve('node_modules/model-conversion-async') + "&& ./shapr3dconvert" + ` ${model.inputFile} --format ${model.format} ${path.resolve(model.outputFile)}`,
-            []
+        const scriptLocation = path.resolve(__dirname + '/../../node_modules/model-conversion-async');
+        const process = this.processProvider.execFile(
+            scriptLocation + '/shapr3dconvert',
+            [
+                `${model.inputFile}`,
+                `--format ${model.format}`,
+                `${path.resolve(model.outputFile)}`
+            ],
+            {cwd: scriptLocation}
         )
         process.on('close', (code) => {
             if (code === 0) {
@@ -73,6 +79,10 @@ export class ExportProcessorService extends EventEmitter {
             console.log('FAILURE2', model)
             this.emit('modelProcessingFailure', model)
             process.kill()
+        })
+        process.on('error', (error: any) => {
+            console.error(error)
+            this.emit('modelProcessingFailure', model)
         })
     }
 

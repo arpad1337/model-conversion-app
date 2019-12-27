@@ -103,5 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
+static/exports/
 !**/.gitkeep
 1Kh0H29dexjlUYAu.json
