@@ -196,7 +196,7 @@ function ModelDisplay({ model, onModelRemoval }) {
     return (
         <Row className="grid-row">
             <Col xs={7} className="filename">
-                {model.filename}
+                {model.filename} > .{model.format}
             </Col>
             <Col xs={2} className={`process-status text-center ${model.status}`}>
                 {getModelStatusText(model.status, model.outputFile)}
