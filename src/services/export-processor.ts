@@ -10,7 +10,7 @@ export interface Process extends EventEmitter {
 }
 
 export interface ProcessProvider {
-    execFile: (process: string, args?: string[], options?: any) => Process
+    execFile: (process: string, args?: string[], options?: {cwd: string}) => Process
 }
 
 export class ExportProcessorService extends EventEmitter {
@@ -27,7 +27,6 @@ export class ExportProcessorService extends EventEmitter {
     }
 
     public scheduleProcessing(model: ExportableModel): void {
-        console.log('SCHEDULING MODEL', model)
         this.processQueue.push(model)
     }
 
@@ -44,24 +43,21 @@ export class ExportProcessorService extends EventEmitter {
     }
 
     private startProcessing(model: ExportableModel): void {
-        console.log('SPAWNING PROCESS')
         const scriptLocation = path.resolve(__dirname + '/../../node_modules/model-conversion-async');
         const process = this.processProvider.execFile(
             scriptLocation + '/shapr3dconvert',
             [
                 `${model.inputFile}`,
                 `--format ${model.format}`,
-                `${path.resolve(model.outputFile)}`
+                `${path.resolve(__dirname + '/../../static/' + model.outputFile)}`
             ],
             {cwd: scriptLocation}
         )
         process.on('close', (code) => {
             if (code === 0) {
-                console.log('SUCCESS', model)
                 this.emit('modelProcessed', model)
                 return
             }
-            console.log('FAILURE1', model)
             this.emit('modelProcessingFailure', model)
         })
         process.stdout.on('data', (fragment: any) => {
@@ -69,19 +65,15 @@ export class ExportProcessorService extends EventEmitter {
             if (data.indexOf('###') === 0) {
                 const percent = data.match(/[0-9]{2}/ig)
                 if (percent) {
-                    console.log('PROGRESS', model)
-                    this.emit('modelProcessingInProgress', model, percent)
+                    this.emit('modelProcessingInProgress', model, percent[0])
                 }
             }
         })
-        process.stderr.on('data', (err) => {
-            console.log(err.toString())
-            console.log('FAILURE2', model)
+        process.stderr.on('data', () => {
             this.emit('modelProcessingFailure', model)
             process.kill()
         })
-        process.on('error', (error: any) => {
-            console.error(error)
+        process.on('error', () => {
             this.emit('modelProcessingFailure', model)
         })
     }

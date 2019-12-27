@@ -20,7 +20,7 @@ export class ExportableModelController extends Controller {
         this.exportProcessor = exportProcessor
     }
 
-    listen(): void {
+    public listen(): void {
         this.exportProcessor.on('modelProcessed', (model: ExportableModel) => {
             model.status = 'processed'
             model.progress = 100
@@ -46,18 +46,23 @@ export class ExportableModelController extends Controller {
         })
     }
 
-    getAll(req: Request, res: Response) {
-        res.send(this.exportableModelService.getAll())
+    public getAll(req: Request, res: Response): void {
+        res.send(this.exportableModelService.getAll().map((model: ExportableModel) => {
+            delete model.inputFile
+            return model
+        }))
         res.end()
     }
 
-    getByID(req: Request, res: Response) {
+    public getByID(req: Request, res: Response): void {
         const id = req.params.id
-        res.send(this.exportableModelService.getById(id))
+        let model = this.exportableModelService.getById(id)
+        delete model.inputFile
+        res.send(model)
         res.end()
     }
 
-    createNewModel(req: Request, res: Response, next: Function) {
+    public createNewModel(req: Request, res: Response): void {
         const inputFile = req['files'].inputFile[0].path
         const format = req['fields'].format[0]
         switch(format) {
@@ -72,11 +77,22 @@ export class ExportableModelController extends Controller {
         }
         const model = this.exportableModelService.createModel(inputFile, format)
         this.exportProcessor.scheduleProcessing(model)
-        res.send(model)
+        let copy = {
+            ...model
+        }
+        delete copy.inputFile
+        res.send(copy)
         res.end()
     }
 
-    static get instance(): ExportableModelController {
+    public deleteModel(req: Request, res: Response): void {
+        const id = req.params.id
+        this.exportableModelService.deleteModelByID(id)
+        res.send({status: true})
+        res.end()
+    }
+
+    public static get instance(): ExportableModelController {
         if (!this.singleton) {
             const exportableModelService = ExportableModelService.instance
             const exportProcessor = ExportProcessorService.instance

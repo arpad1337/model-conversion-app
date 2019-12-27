@@ -32,6 +32,12 @@ module.exports = {
             controller: 'exportable-model',
             action: 'createNewModel',
             middlewares: ['multipart-parser']
+        },
+        {
+            method: 'DELETE',
+            path: '/v1/models/:id',
+            controller: 'exportable-model',
+            action: 'deleteModel',
         }
 
     ]

@@ -47,7 +47,7 @@ export class ExportableModelService {
         const model: ExportableModel = {
             format: format,
             inputFile: inputFile,
-            outputFile: './static/exports/' + outputFile,
+            outputFile: './exports/' + outputFile,
             progress: 0,
             status: 'waiting',
             id: null
@@ -56,8 +56,12 @@ export class ExportableModelService {
         return model
     }
 
-    public updateModel(model: ExportableModel): void {
-        return this.databaseProvider.updateByIdInSchema(ExportableModelService.COLLECTION_ID, model)
+    public updateModel(model: ExportableModel): ExportableModel {
+        return this.databaseProvider.updateByIdInSchema(ExportableModelService.COLLECTION_ID, model) as ExportableModel
+    }
+
+    public deleteModelByID(id: string): void {
+        this.databaseProvider.deleteFromSchemaById(ExportableModelService.COLLECTION_ID, id)
     }
 
     static get instance(): ExportableModelService {

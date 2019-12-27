@@ -51,7 +51,7 @@ export class DatabaseProvider {
         this.commit()
     }
 
-    public updateByIdInSchema(key: string, model: HasID): void {
+    public updateByIdInSchema(key: string, model: HasID): any {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
@@ -60,6 +60,7 @@ export class DatabaseProvider {
             stored[property] = model[property]
         }
         this.commit()
+        return this.getFromSchemaByID(key, model.id)
     }
 
     public deleteFromSchemaById(key: string, id: string) {
