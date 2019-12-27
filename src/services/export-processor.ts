@@ -68,7 +68,7 @@ export class ExportProcessorService extends EventEmitter {
         process.stdout.on('data', (fragment: any) => {
             const data = fragment.toString()
             if (data.indexOf('###') === 0) {
-                const percent = data.match(/[0-9]{2}/ig)
+                const percent = data.match(/[0-9]+/ig)
                 if (percent) {
                     this.emit('modelProcessingInProgress', model, percent[0])
                 }
