@@ -6,10 +6,12 @@ export class MultipartParserMiddleware implements Middleware {
 
     promisifyUpload(req): Promise<[any[], any[]]> {
         return new Promise((resolve, reject) => {
-            const form = new multiparty.Form();
-            form.parse(req, function(err, fields, files) {
-                if (err) return reject(err);
-                return resolve([fields, files]);
+            const form = new multiparty.Form()
+            form.parse(req, (err, fields, files) => {
+                if (err) {
+                    return reject(err)
+                }
+                return resolve([fields, files])
             });
         });
     }

@@ -8,6 +8,7 @@ export class ErrorHandlerMiddleware {
      * hooking into this middleware as default error handler. No workaround exists
      */
     handle(error: APIError, _: Request, res: Response, _2: Function) {
+        res.status(500)
         res.send(error)
         res.end()
     }

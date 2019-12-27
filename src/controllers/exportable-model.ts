@@ -76,6 +76,10 @@ export class ExportableModelController extends Controller {
         const inputFile = req['files'].inputFile[0].path
         const filename = req['files'].inputFile[0].originalFilename
         const format = req['fields'].format[0]
+        const extension = this.extractExtension(inputFile)
+        if (extension !== 'shapr') {
+            throw new APIError('Extension unsupported', 1001)
+        }
         switch(format) {
             case 'obj':
             case 'step':
@@ -84,7 +88,7 @@ export class ExportableModelController extends Controller {
                 break;
             }
             default: 
-                throw new APIError('Unknown format', 1001)
+                throw new APIError('Unknown format', 1002)
         }
         const model = this.exportableModelService.createModel(filename, inputFile, format)
         this.exportProcessor.scheduleProcessing(model)
@@ -94,6 +98,10 @@ export class ExportableModelController extends Controller {
         delete copy.inputFile
         res.send(copy)
         res.end()
+    }
+
+    private extractExtension(inputFile: string): string {
+        return inputFile.split('.').pop();
     }
 
     public deleteModel(req: Request, res: Response): void {
