@@ -3,6 +3,7 @@ import { Application } from 'express'
 import { controllerMapping } from './controllers'
 import { middlewareMapping, ErrorHandlerMiddleware } from './middlewares'
 import { DatabaseProvider } from './providers'
+import { ExportProcessorService } from './services/export-processor'
 
 export type HTTPMethod = 'GET' | 'POST'| 'PUT' | 'DELETE'
 
@@ -71,6 +72,7 @@ export default class App {
 
     public onExit() {
         DatabaseProvider.instance.commit();
+        ExportProcessorService.instance.onExit()
     }
 
 }

@@ -89,6 +89,12 @@ export class ExportProcessorService extends EventEmitter {
         this.processes.delete(id)
     }
 
+    public onExit(): void {
+        this.processes.forEach((process: Process) => {
+            process && process.kill()
+        })
+    }
+
     public static get instance(): ExportProcessorService {
         if (!this.singleton) {
             this.singleton = new ExportProcessorService(processProvider)
