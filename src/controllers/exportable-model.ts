@@ -22,25 +22,37 @@ export class ExportableModelController extends Controller {
 
     public listen(): void {
         this.exportProcessor.on('modelProcessed', (model: ExportableModel) => {
-            this.exportableModelService.updateModel({
-                ...model,
-                progress: 100,
-                status: 'processed'
-            })
+            try {
+                this.exportableModelService.updateModel({
+                    ...model,
+                    progress: 100,
+                    status: 'processed'
+                }) 
+            } catch(e) {
+                this.exportProcessor.terminateProcess(model.id)
+            }
         })
         this.exportProcessor.on('modelProcessingInProgress', (model: ExportableModel, percent: number) => {
-            this.exportableModelService.updateModel({
-                ...model,
-                progress: percent,
-                status: 'in-progress'
-            })
+            try {
+                this.exportableModelService.updateModel({
+                    ...model,
+                    progress: percent,
+                    status: 'in-progress'
+                }) 
+            } catch(e) {
+                this.exportProcessor.terminateProcess(model.id)
+            }
         })
         this.exportProcessor.on('modelProcessingFailure', (model: ExportableModel) => {
-            this.exportableModelService.updateModel({
-                ...model,
-                progress: 0,
-                status: 'error'
-            })
+            try {
+                this.exportableModelService.updateModel({
+                    ...model,
+                    progress: 0,
+                    status: 'error'
+                })
+            } catch(e) {
+                this.exportProcessor.terminateProcess(model.id)
+            }
         })
     }
 
@@ -86,6 +98,7 @@ export class ExportableModelController extends Controller {
 
     public deleteModel(req: Request, res: Response): void {
         const id = req.params.id
+        this.exportProcessor.terminateProcess(id)
         this.exportableModelService.deleteModelByID(id)
         res.send({status: true})
         res.end()

@@ -19,11 +19,13 @@ export class ExportProcessorService extends EventEmitter {
 
     private processProvider: ProcessProvider
     private processQueue: ExportableModel[]
+    private processes: Map<string, Process>
 
     constructor(processProvider: ProcessProvider) {
         super()
         this.processProvider = processProvider
         this.processQueue = []
+        this.processes = new Map()
     }
 
     public scheduleProcessing(model: ExportableModel): void {
@@ -53,6 +55,9 @@ export class ExportProcessorService extends EventEmitter {
             ],
             {cwd: scriptLocation}
         )
+
+        this.processes.set(model.id, process)
+
         process.on('close', (code) => {
             if (code === 0) {
                 this.emit('modelProcessed', model)
@@ -76,6 +81,12 @@ export class ExportProcessorService extends EventEmitter {
         process.on('error', () => {
             this.emit('modelProcessingFailure', model)
         })
+    }
+
+    public terminateProcess(id: string): void {
+        const process = this.processes.get(id)
+        process && process.kill() 
+        this.processes.delete(id)
     }
 
     static get instance(): ExportProcessorService {
