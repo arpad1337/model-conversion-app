@@ -1,0 +1,58 @@
+body {
+    margin-top: 50px;
+    font-family: 'Lato';
+    background: #defbff;
+}
+
+.title {
+    text-align: center;
+    width: 100%;
+}
+
+.filename {
+    text-align: left;
+}
+
+.progress-bar-col {
+    padding-top: 4px;
+}
+
+.process-status.processed {
+    color: green;
+}
+
+.process-status.in-progress {
+    color: #30acd9;
+}
+
+.process-status.waiting {
+    color: #ffd342
+}
+
+.process-status.error {
+    color: red;
+}
+
+.remove-fix-pos {
+    position: absolute;
+    top: -5px;
+}
+
+.upload-model {
+    border: 1px solid #ccc;
+    background: #fafafa;
+    padding: 40px;
+    margin: 40px;
+    border-radius: 10px;
+}
+
+.grid-row {
+    background: #fafafa;
+    padding: 20px;
+    margin-bottom: 1px;
+    border-bottom: 1px solid #ccc;
+}
+
+.grid-row:last-child {
+    border: 0;
+}
