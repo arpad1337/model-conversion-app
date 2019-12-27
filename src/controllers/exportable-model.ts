@@ -62,6 +62,7 @@ export class ExportableModelController extends Controller {
 
     public createNewModel(req: Request, res: Response): void {
         const inputFile = req['files'].inputFile[0].path
+        const filename = req['files'].inputFile[0].originalFilename
         const format = req['fields'].format[0]
         switch(format) {
             case 'obj':
@@ -73,7 +74,7 @@ export class ExportableModelController extends Controller {
             default: 
                 throw new APIError('Unknown format', 1001)
         }
-        const model = this.exportableModelService.createModel(inputFile, format)
+        const model = this.exportableModelService.createModel(filename, inputFile, format)
         this.exportProcessor.scheduleProcessing(model)
         let copy = {
             ...model

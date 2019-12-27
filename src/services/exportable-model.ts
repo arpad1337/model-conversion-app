@@ -11,6 +11,7 @@ export interface ExportableModel {
     format: FileFormat
     status: FileStatus
     id: string
+    filename: string 
 }
 
 export class ExportableModelService {
@@ -40,9 +41,9 @@ export class ExportableModelService {
         return this.databaseProvider.getFromSchemaByID(ExportableModelService.COLLECTION_ID, id) as ExportableModel
     }
 
-    public createModel(inputFile: string, format: FileFormat): ExportableModel {
+    public createModel(filename: string, inputFile: string, format: FileFormat): ExportableModel {
         const outputFile = crypto.createHash("sha256")
-            .update(inputFile + (new Date()).toISOString)
+            .update(filename + (new Date()).toISOString())
             .digest("hex") + '.' + format
         const model: ExportableModel = {
             format: format,
@@ -50,7 +51,8 @@ export class ExportableModelService {
             outputFile: './exports/' + outputFile,
             progress: 0,
             status: 'waiting',
-            id: null
+            id: null,
+            filename: filename
         }
         const newModel = this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model)
         return newModel
