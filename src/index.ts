@@ -62,10 +62,11 @@ export default class App {
         })
     }
 
-    public listen(): void {
+    public listen(cb: Function): void {
         this.setup()
-        this.app.listen(this.port, "0.0.0.0", () => {
+        this.app.listen(this.port, "0.0.0.0", (err) => {
             console.log('Application listening on port', this.port)
+            cb && cb(err || null)
         })
     }
 
