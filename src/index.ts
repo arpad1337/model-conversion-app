@@ -1,9 +1,8 @@
 import * as express from 'express'
-import { Application, Request, Response } from 'express'
+import { Application } from 'express'
 import { controllerMapping } from './controllers'
-import { middlewareMapping } from './middlewares'
+import { middlewareMapping, ErrorHandlerMiddleware } from './middlewares'
 import { DatabaseProvider } from './providers'
-import { ErrorHandlerMiddleware } from './middlewares'
 
 export type HTTPMethod = 'GET' | 'POST'| 'PUT' | 'DELETE'
 

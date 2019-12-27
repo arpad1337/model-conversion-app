@@ -56,3 +56,7 @@ body {
 .grid-row:last-child {
     border: 0;
 }
+
+.margin-top-10 {
+    margin-top: 10px;
+}

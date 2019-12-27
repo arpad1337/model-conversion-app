@@ -70,7 +70,7 @@ function ExportableModelsList() {
 }
 
 function AddModelForm({ onNewModel }) {
-    const { Form, InputGroup, Button, Row, Col } = ReactBootstrap;
+    const { Form, InputGroup, Button, Row, Col, Alert } = ReactBootstrap;
 
     const [newModel, setNewModel] = React.useState({
         inputFile: null,
@@ -78,9 +78,23 @@ function AddModelForm({ onNewModel }) {
     });
     const [submitting, setSubmitting] = React.useState(false);
 
+    const [error, setError] = React.useState(null)
+
+    const handleErrors = (response) => {
+        if (!response.ok) {
+            response.json().then((error) => {
+                setSubmitting(false);
+                setError(error);
+            });
+            throw Error('Error 500');
+        }
+        return response;
+    }
+
     const submitNewModel = e => {
         e.preventDefault();
         setSubmitting(true);
+        setError(null)
         const formData = new FormData();
         formData.set('inputFile', newModel.inputFile);
         formData.set('format', newModel.format);
@@ -88,6 +102,7 @@ function AddModelForm({ onNewModel }) {
             method: 'POST',
             body: formData
         })
+            .then(handleErrors)
             .then(r => r.json())
             .then(model => {
                 onNewModel(model);
@@ -96,7 +111,10 @@ function AddModelForm({ onNewModel }) {
                     inputFile: null,
                     type: 'obj'
                 });
-            });
+            })
+            .catch((error) => {
+                console.error(error.message);
+            })
     };
 
     const onFileSelected = e => {
@@ -105,6 +123,13 @@ function AddModelForm({ onNewModel }) {
             ...newModel,
             inputFile: e.target.files[0]
         })
+    }
+
+    const getErrorBox = () => {
+        if (error) {
+            return <Alert className="margin-top-10" variant="danger">{`#${error.code} ${error.message}`}</Alert>
+        }
+        return '';
     }
 
     return (
@@ -149,6 +174,7 @@ function AddModelForm({ onNewModel }) {
                     {submitting ? 'Uploading...' : 'Upload model'}
                 </Button>
             </InputGroup.Append>
+            {getErrorBox()}
         </Form>
     );
 }
