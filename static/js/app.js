@@ -172,7 +172,7 @@ function AddModelForm({ onNewModel }) {
 }
 
 function ModelDisplay({ model, onModelRemoval }) {
-    const { Row, Col, Button, ProgressBar } = ReactBootstrap;
+    const { Row, Col, Button, ProgressBar, Badge } = ReactBootstrap;
 
     const removeModel = () => {
         fetch(`/v1/models/${model.id}`, { method: 'DELETE' }).then(() =>
@@ -196,7 +196,7 @@ function ModelDisplay({ model, onModelRemoval }) {
     return (
         <Row className="grid-row">
             <Col xs={7} className="filename">
-                {model.filename}
+                {model.filename} <Badge variant="secondary">{model.format}</Badge>
             </Col>
             <Col xs={2} className={`process-status text-center ${model.status}`}>
                 {getModelStatusText(model.status, model.outputFile)}
