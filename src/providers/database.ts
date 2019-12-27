@@ -8,14 +8,14 @@ export interface HasID {
 export class DatabaseProvider {
 
     private static singleton: DatabaseProvider = null
-    private static readonly STORAGE_FILE_NAME = '1Kh0H29dexjlUYAu'
+    private static readonly STORAGE_FILENAME = '1Kh0H29dexjlUYAu'
     private DB: any = {}
 
     public initialize(): void {
-        if (!fs.existsSync(`./${DatabaseProvider.STORAGE_FILE_NAME}.json`)) {
+        if (!fs.existsSync(`./${DatabaseProvider.STORAGE_FILENAME}.json`)) {
             this.commit()
         }
-        const file = fs.readFileSync(`./${DatabaseProvider.STORAGE_FILE_NAME}.json`)
+        const file = fs.readFileSync(`./${DatabaseProvider.STORAGE_FILENAME}.json`)
         const jsonContents = JSON.parse(file.toString())
         this.DB = jsonContents || {}
     }
@@ -85,7 +85,7 @@ export class DatabaseProvider {
     }
 
     public commit(): void {
-        fs.writeFileSync(`./${DatabaseProvider.STORAGE_FILE_NAME}.json`, JSON.stringify(this.DB))
+        fs.writeFileSync(`./${DatabaseProvider.STORAGE_FILENAME}.json`, JSON.stringify(this.DB))
     }
 
     public static get instance(): DatabaseProvider {
