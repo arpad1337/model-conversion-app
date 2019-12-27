@@ -4,7 +4,7 @@ import { ExportableModel } from './exportable-model'
 import * as path from 'path'
 
 export interface Process extends EventEmitter {
-    stdout: EventEmitter,
+    stdout: EventEmitter
     stderr: EventEmitter
     kill: () => void
 }
