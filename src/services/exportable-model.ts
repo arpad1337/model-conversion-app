@@ -33,11 +33,11 @@ export class ExportableModelService {
     }
 
     public getAll(): ExportableModel[] {
-        return this.databaseProvider.getAllFromSchema(ExportableModelService.COLLECTION_ID)as ExportableModel[]
+        return this.databaseProvider.getAllFromSchema(ExportableModelService.COLLECTION_ID) as ExportableModel[]
     }
 
     public getById(id: string): ExportableModel {
-        return this.databaseProvider.getFromSchemaByID(ExportableModelService.COLLECTION_ID, id)as ExportableModel
+        return this.databaseProvider.getFromSchemaByID(ExportableModelService.COLLECTION_ID, id) as ExportableModel
     }
 
     public createModel(inputFile: string, format: FileFormat): ExportableModel {
@@ -52,8 +52,8 @@ export class ExportableModelService {
             status: 'waiting',
             id: null
         }
-        this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model)
-        return model
+        const newModel = this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model)
+        return newModel
     }
 
     public updateModel(model: ExportableModel): ExportableModel {

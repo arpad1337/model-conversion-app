@@ -32,23 +32,35 @@ export class DatabaseProvider {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
-        return this.DB[key].concat()
+        return this.DB[key].concat().map((model: any) => {
+            return {
+                ...model
+            }
+        })
     }
 
     public getFromSchemaByID(key: string, id: string): any {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
-        return this.DB[key].find((m: any) => m.id === id)
+        return {
+            ...this.DB[key].find((m: any) => m.id === id)
+        }
     }
 
-    public pushToSchema(key: string, model: any): void {
+    public pushToSchema(key: string, model: any): any {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
-        model['id'] = uuid()
-        this.DB[key].push(model)
+        const copy = {
+            ...model
+        }
+        copy['id'] = uuid()
+        this.DB[key].push(copy)
         this.commit()
+        return {
+            ...copy
+        }
     }
 
     public updateByIdInSchema(key: string, model: HasID): any {
