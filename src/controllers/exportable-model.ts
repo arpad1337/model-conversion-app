@@ -22,15 +22,13 @@ export class ExportableModelController extends Controller {
 
     public listen(): void {
         this.exportProcessor.on('modelProcessed', (model: ExportableModel) => {
-            model.status = 'processed'
-            model.progress = 100
             this.exportableModelService.updateModel({
                 ...model,
                 progress: 100,
                 status: 'processed'
             })
         })
-        this.exportProcessor.on('modelProcessingInProgress', (model: ExportableModel, percent) => {
+        this.exportProcessor.on('modelProcessingInProgress', (model: ExportableModel, percent: number) => {
             this.exportableModelService.updateModel({
                 ...model,
                 progress: percent,
