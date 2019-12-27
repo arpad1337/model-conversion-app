@@ -10,6 +10,9 @@ Its a Frontend application and the CRUD API around the [model-conversion-async](
  - NPM 5.0 and above
  - Docker Desktop 2.1 and above
 
+## Screenshot
+
+![](screenshot.png)
 
 ## Build
 
