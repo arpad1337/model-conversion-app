@@ -11,14 +11,14 @@ if (require && require.main === module) {
         }
     })
 
-    const onExit = () => {
+    const onGracefulExit = () => {
         app.onExit()
         process.exit(0)
     }
 
-    process.on('SIGINT', onExit);
-    process.on('SIGTERM', onExit);
-    process.on('SIGUSR2', onExit);
+    process.on('SIGINT', onGracefulExit);
+    process.on('SIGTERM', onGracefulExit);
+    process.on('SIGUSR2', onGracefulExit);
 
 }
 
