@@ -6,7 +6,7 @@ import { ExportProcessorService } from '../services/export-processor';
 
 export class ExportableModelController extends Controller {
 
-    protected static singleton: ExportableModelController = null;
+    protected static singleton: ExportableModelController
 
     private exportableModelService: ExportableModelService
     private exportProcessor: ExportProcessorService

@@ -30,14 +30,14 @@ function ExportableModelsList() {
             fetch('/v1/models')
                 .then(r => r.json())
                 .then(setModels);
-        }, 3000)
+        }, 3000);
     }, []);
 
     const onNewModel = React.useCallback(
         newModel => {
             setModels([...models, newModel]);
         },
-        [models],
+        [models]
     );
 
     const onModelRemoval = React.useCallback(
@@ -45,7 +45,7 @@ function ExportableModelsList() {
             const index = models.findIndex(m => m.id === model.id);
             setModels([...models.slice(0, index), ...models.slice(index + 1)]);
         },
-        [models],
+        [models]
     );
 
     if (models === null) return 'Loading...';
@@ -120,12 +120,10 @@ function AddModelForm({ onNewModel }) {
 
     const getErrorBox = () => {
         if (error) {
-            return <Alert className="margin-top-10" variant="danger">{`#${error.code} ${error.message}`}</Alert>
+            return (<Alert className="margin-top-10" variant="danger">{`#${error.code} ${error.message}`}</Alert>);
         }
         return '';
     }
-
-    let fileInput;
 
     return (
         <Form onSubmit={submitNewModel} className="upload-model">
@@ -175,9 +173,9 @@ function ModelDisplay({ model, onModelRemoval }) {
     const { Row, Col, Button, ProgressBar, Badge } = ReactBootstrap;
 
     const removeModel = () => {
-        fetch(`/v1/models/${model.id}`, { method: 'DELETE' }).then(() =>
-            onModelRemoval(model),
-        );
+        fetch(`/v1/models/${model.id}`, { method: 'DELETE' }).then(() => {
+            onModelRemoval(model);
+        });
     };
 
     const getModelStatusText = (status, link) => {
@@ -189,7 +187,7 @@ function ModelDisplay({ model, onModelRemoval }) {
             case 'waiting':
                 return 'Waiting in Queue';
             case 'processed':
-                return (<a href={link} target="_blank">Processed</a>)
+                return (<a href={link} target="_blank">Processed</a>);
         }
     }
 

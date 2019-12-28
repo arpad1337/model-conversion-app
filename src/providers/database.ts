@@ -9,8 +9,9 @@ export interface HasID {
 
 export class DatabaseProvider {
 
-    private static singleton: DatabaseProvider = null
+    protected static singleton: DatabaseProvider = null
     private static readonly STORAGE_FILENAME = '1Kh0H29dexjlUYAu'
+
     private DB: any
 
     constructor() {

@@ -5,7 +5,7 @@ import { ProcessProvider, Process } from '../providers/process'
 
 export class ExportProcessorService extends EventEmitter {
 
-    private static singleton: ExportProcessorService
+    protected static singleton: ExportProcessorService
 
     private processProvider: ProcessProvider
     private processQueue: ExportableModel[]

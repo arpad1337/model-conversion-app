@@ -25,7 +25,7 @@ export class ProcessProvider {
         return this.childProcessProvider.execFile.call(this.childProcessProvider, process, args, options)
     }
 
-    public static get instance() {
+    public static get instance(): ProcessProvider {
         if (!this.singleton) {
             this.singleton = new ProcessProvider(childProcessProvider)
         }

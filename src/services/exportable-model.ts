@@ -18,7 +18,7 @@ export interface ExportableModel {
 
 export class ExportableModelService {
 
-    private static singleton: ExportableModelService = null
+    protected static singleton: ExportableModelService = null
     private static readonly COLLECTION_ID = 'files'
 
     private databaseProvider: DatabaseProvider
