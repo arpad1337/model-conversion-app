@@ -4,7 +4,7 @@
  */
 
 function App() {
-    const { Container, Row, Col } = ReactBootstrap;
+    const { Container, Row, Col } = ReactBootstrap
     return (
         <Container>
             <Row>
@@ -14,41 +14,41 @@ function App() {
                 </Col>
             </Row>
         </Container>
-    );
+    )
 }
 
 function ExportableModelsList() {
-    const { Container } = ReactBootstrap;
+    const { Container } = ReactBootstrap
 
-    const [models, setModels] = React.useState(null);
+    const [models, setModels] = React.useState(null)
 
     React.useEffect(() => {
         fetch('/v1/models')
             .then(r => r.json())
-            .then(setModels);
+            .then(setModels)
         setInterval(() => {
             fetch('/v1/models')
                 .then(r => r.json())
-                .then(setModels);
-        }, 3000);
-    }, []);
+                .then(setModels)
+        }, 3000)
+    }, [])
 
     const onNewModel = React.useCallback(
         newModel => {
-            setModels([...models, newModel]);
+            setModels([...models, newModel])
         },
         [models]
-    );
+    )
 
     const onModelRemoval = React.useCallback(
         model => {
-            const index = models.findIndex(m => m.id === model.id);
-            setModels([...models.slice(0, index), ...models.slice(index + 1)]);
+            const index = models.findIndex(m => m.id === model.id)
+            setModels([...models.slice(0, index), ...models.slice(index + 1)])
         },
         [models]
-    );
+    )
 
-    if (models === null) return 'Loading...';
+    if (models === null) return 'Loading...'
 
     return (
         <React.Fragment>
@@ -66,37 +66,37 @@ function ExportableModelsList() {
                 ))}
             </Container>
         </React.Fragment>
-    );
+    )
 }
 
 function AddModelForm({ onNewModel }) {
-    const { Form, InputGroup, Button, Row, Col, Alert } = ReactBootstrap;
+    const { Form, InputGroup, Button, Row, Col, Alert } = ReactBootstrap
 
-    const [newModelFile, setNewModelFile] = React.useState(null);
-    const [newModelFormat, setNewModelFormat] = React.useState('obj');
+    const [newModelFile, setNewModelFile] = React.useState(null)
+    const [newModelFormat, setNewModelFormat] = React.useState('obj')
 
-    const [submitting, setSubmitting] = React.useState(false);
+    const [submitting, setSubmitting] = React.useState(false)
 
     const [error, setError] = React.useState(null)
 
     const handleErrors = (response) => {
         if (!response.ok) {
             response.json().then((error) => {
-                setSubmitting(false);
-                setError(error);
-            });
-            throw Error('Error 500');
+                setSubmitting(false)
+                setError(error)
+            })
+            throw Error('Error 500')
         }
-        return response;
+        return response
     }
 
     const submitNewModel = e => {
-        e.preventDefault();
-        setSubmitting(true);
-        setError(null);
-        const formData = new FormData();
-        formData.set('inputFile', newModelFile);
-        formData.set('format', newModelFormat);
+        e.preventDefault()
+        setSubmitting(true)
+        setError(null)
+        const formData = new FormData()
+        formData.set('inputFile', newModelFile)
+        formData.set('format', newModelFormat)
         fetch('/v1/models', {
             method: 'POST',
             body: formData
@@ -104,25 +104,29 @@ function AddModelForm({ onNewModel }) {
             .then(handleErrors)
             .then(r => r.json())
             .then(model => {
-                onNewModel(model);
-                setSubmitting(false);
-                setNewModelFile(null);
+                onNewModel(model)
+                setSubmitting(false)
+                setNewModelFile(null)
             })
             .catch((error) => {
-                console.error(error.message);
+                console.error(error.message)
             })
-    };
+    }
 
     const onFileSelected = e => {
-        e.preventDefault();
-        setNewModelFile(e.target.files[0]);
+        e.preventDefault()
+        setNewModelFile(e.target.files[0])
     }
 
     const getErrorBox = () => {
         if (error) {
-            return (<Alert className="margin-top-10" variant="danger">{`#${error.code} ${error.message}`}</Alert>);
+            return (
+				<Alert className="margin-top-10" variant="danger">
+					{`#${error.code} ${error.message}`}
+				</Alert>
+			)
         }
-        return '';
+        return ''
     }
 
     return (
@@ -143,15 +147,15 @@ function AddModelForm({ onNewModel }) {
             <Form.Group as={Row}>
                 <Form.Label column sm="3">Model file</Form.Label>
                 <Col sm="9">
-                <Form.Control
-                    column 
-                    sm="10"
-                    offset="2"
-                    type="file"
-                    onChange={e => onFileSelected(e)}
-                    placeholder="Convertable file"
-                    aria-describedby="basic-addon1"
-                />
+                    <Form.Control
+                        column
+                        sm="10"
+                        offset="2"
+                        type="file"
+                        onChange={e => onFileSelected(e)}
+                        placeholder="Convertable file"
+                        aria-describedby="basic-addon1"
+                    />
                 </Col>
             </Form.Group>
             <InputGroup.Append>
@@ -166,28 +170,28 @@ function AddModelForm({ onNewModel }) {
             </InputGroup.Append>
             {getErrorBox()}
         </Form>
-    );
+    )
 }
 
 function ModelDisplay({ model, onModelRemoval }) {
-    const { Row, Col, Button, ProgressBar, Badge } = ReactBootstrap;
+    const { Row, Col, Button, ProgressBar, Badge } = ReactBootstrap
 
     const removeModel = () => {
         fetch(`/v1/models/${model.id}`, { method: 'DELETE' }).then(() => {
-            onModelRemoval(model);
-        });
-    };
+            onModelRemoval(model)
+        })
+    }
 
     const getModelStatusText = (status, link) => {
-        switch(status) {
+        switch (status) {
             case 'error':
-                return 'Error';
+                return 'Error'
             case 'in-progress':
-                return 'In Progress';
+                return 'In Progress'
             case 'waiting':
-                return 'Waiting in Queue';
+                return 'Waiting in Queue'
             case 'processed':
-                return (<a href={link} target="_blank">Processed</a>);
+                return (<a href={link} target="_blank">Processed</a>)
         }
     }
 
@@ -198,7 +202,7 @@ function ModelDisplay({ model, onModelRemoval }) {
                 <br />
                 <span className="dates">
                     Created at: {(new Date(model.createdAt)).toUTCString()},
-                    updated: {(new Date(model.updatedAt)).toUTCString()}
+updated: {(new Date(model.updatedAt)).toUTCString()}
                 </span>
             </Col>
             <Col xs={2} className={`process-status text-center ${model.status} padding-top-11`}>
@@ -219,7 +223,7 @@ function ModelDisplay({ model, onModelRemoval }) {
                 </Button>
             </Col>
         </Row>
-    );
+    )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'))
