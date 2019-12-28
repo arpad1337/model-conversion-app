@@ -9,16 +9,17 @@ export class MultipartParserMiddleware implements Middleware {
             const form = new multiparty.Form()
             form.parse(req, (err, fields, files) => {
                 if (err) {
-                    return reject(err)
+                    reject(err)
+                    return
                 }
-                return resolve([fields, files])
+                resolve([fields, files])
             });
         });
     }
 
     public async handle(req: Request, res: Response, next: Function) {
         try {
-            const [fields, files] = await this.promisifyUpload(req)
+            const [fields, files]: [any[], any[]] = await this.promisifyUpload(req)
             req['fields'] = fields
             req['files'] = files
             next()

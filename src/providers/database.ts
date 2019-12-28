@@ -9,7 +9,11 @@ export class DatabaseProvider {
 
     private static singleton: DatabaseProvider = null
     private static readonly STORAGE_FILENAME = '1Kh0H29dexjlUYAu'
-    private DB: any = {}
+    private DB: any
+
+    constructor() {
+        this.DB = {}
+    }
 
     public initialize(): void {
         if (!fs.existsSync(`./${DatabaseProvider.STORAGE_FILENAME}.json`)) {

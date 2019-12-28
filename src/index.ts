@@ -31,10 +31,10 @@ export default class App {
     private staticPath: string
 
     constructor(config: AppConfig) {
-        this.port = config.port || 3000
+        this.port = config.port || 1337
         this.routes = config.routes || []
         this.middlewares = config.middlewares || []
-        this.staticPath = config.staticPath
+        this.staticPath = config.staticPath || './static'
         this.app = express()
     }
 
@@ -65,8 +65,11 @@ export default class App {
     public listen(cb: Function): void {
         this.setup()
         this.app.listen(this.port, "0.0.0.0", (err) => {
+            if (err) {
+                cb && cb(err)
+                return
+            }
             console.log('Application listening on port', this.port)
-            cb && cb(err || null)
         })
     }
 

@@ -45,15 +45,15 @@ export class ExportProcessorService extends EventEmitter {
     }
 
     private startProcessing(model: ExportableModel): void {
-        const scriptLocation = path.resolve(__dirname + '/../../node_modules/model-conversion-async');
+        const cliPath = path.resolve(__dirname + '/../../node_modules/model-conversion-async');
         const process = this.processProvider.execFile(
-            scriptLocation + '/shapr3dconvert',
+            cliPath + '/shapr3dconvert',
             [
                 `${model.inputFile}`,
                 `--format ${model.format}`,
                 `${path.resolve(__dirname + '/../../static/' + model.outputFile)}`
             ],
-            {cwd: scriptLocation}
+            {cwd: cliPath}
         )
 
         this.processes.set(model.id, process)
@@ -61,6 +61,7 @@ export class ExportProcessorService extends EventEmitter {
         process.on('close', (code) => {
             if (code === 0) {
                 this.emit('modelProcessed', model)
+                this.terminateProcess(model.id)
                 return
             }
             this.emit('modelProcessingFailure', model)
