@@ -1,3 +1,5 @@
 export * from './exportable-model'
 export * from './process-wrapper'
 export * from './process-provider'
+export * from './has-id'
+export * from './database-provider'

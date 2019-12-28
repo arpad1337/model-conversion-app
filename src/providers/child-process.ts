@@ -6,11 +6,11 @@ import { ProcessProvider } from '../models/process-provider'
 export interface ChildProcess extends EventEmitter {
     stdout: EventEmitter
     stderr: EventEmitter
-    kill: () => void
+    kill(): void
 }
 
 export interface ChildProcessPackage {
-    execFile: (process: string, args?: string[], options?: {cwd: string}) => ChildProcess 
+    execFile(process: string, args?: string[], options?: {cwd: string}): ChildProcess 
 }
 
 export class ChildProcessWrapper extends EventEmitter implements ProcessWrapper {

@@ -1,6 +1,7 @@
-import { DatabaseProvider } from '../providers/database'
 import { ExportableModel } from '../models/exportable-model'
 import { FileFormat } from 'model-conversion-async/src/lib/file-converter'
+import { DatabaseProvider as DatabaseProviderGetter } from '../providers/database'
+import { DatabaseProvider } from '../models/database-provider'
 
 import * as crypto from 'crypto'
 
@@ -59,7 +60,7 @@ export class ExportableModelService {
 
     public static get instance(): ExportableModelService {
         if (!this.singleton) {
-            const databaseProvider = DatabaseProvider.instance
+            const databaseProvider = DatabaseProviderGetter.instance
             this.singleton = new ExportableModelService(databaseProvider)
             this.singleton.setup()
         }
