@@ -12,6 +12,8 @@ export interface ExportableModel {
     status: FileStatus
     id: string
     filename: string 
+    createdAt: string
+    updatedAt: string
 }
 
 export class ExportableModelService {
@@ -51,7 +53,10 @@ export class ExportableModelService {
             progress: 0,
             status: 'waiting',
             id: null,
-            filename: filename
+            filename: filename,
+            createdAt: (new Date()).toISOString(),
+            updatedAt: (new Date()).toISOString()
+
         }
         const newModel = this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model)
         return newModel

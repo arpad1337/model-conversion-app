@@ -3,6 +3,8 @@ import * as uuid from 'uuid4'
 
 export interface HasID {
     id: string
+    createdAt: string
+    updatedAt: string
 }
 
 export class DatabaseProvider {
@@ -71,10 +73,11 @@ export class DatabaseProvider {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
-        const stored = this.DB[key].find((m: any) => m.id === model.id)
+        const stored = this.DB[key].find((m: any) => m.id === model.id) as HasID
         for(let property in model) {
             stored[property] = model[property]
         }
+        stored.updatedAt = (new Date()).toISOString()
         this.commit()
         return this.getFromSchemaByID(key, model.id)
     }
