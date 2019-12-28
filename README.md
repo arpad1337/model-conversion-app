@@ -23,7 +23,8 @@ docker build . -t model-conversion-app
 ## Tests
 
 ```
-npm run test
+npm install
+npm test
 ```
 
 ## Running

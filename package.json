@@ -4,9 +4,10 @@
   "description": "Frontend and API around the Model Conversion Async CLI",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run build",
     "build": "tsc --module commonjs --target ES5 --outDir ./dist ./src/*.ts",
     "start": "node index.js",
-    "test": "npm run build && jasmine"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
