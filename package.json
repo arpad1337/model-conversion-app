@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --module commonjs --target ES5 --outDir ./dist ./src/*.ts",
     "start": "node index.js",
-    "test": "jasmine"
+    "test": "npm run build && jasmine"
   },
   "repository": {
     "type": "git",
