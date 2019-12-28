@@ -74,6 +74,9 @@ export class DatabaseProvider {
             throw new Error('Schema not found')
         }
         const stored = this.DB[key].find((m: any) => m.id === model.id) as HasID
+        if (!stored) {
+            throw new Error('Model not found')
+        }
         for(let property in model) {
             stored[property] = model[property]
         }
