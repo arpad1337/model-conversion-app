@@ -1,12 +1,6 @@
+const { NetworkStatusController } = require('../../../dist/controllers/network-status')
 
-const { NetworkStatusController } = require('../../dist/controllers/network-status');
-
-const response = {
-    send: () => {
-
-    },
-    end: () => {}
-}
+const response = require('../test-utils/response')
 
 describe('NetworkStatusController tests', () => {
 
@@ -24,7 +18,9 @@ describe('NetworkStatusController tests', () => {
 
         expect(response.send).toHaveBeenCalled()
         expect(response.send).toHaveBeenCalledWith('reply')
+        expect(response.send).toHaveBeenCalledTimes(1)
         expect(response.end).toHaveBeenCalled()
+        expect(response.end).toHaveBeenCalledTimes(1)
     })
 
 })
