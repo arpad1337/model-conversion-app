@@ -5,7 +5,7 @@ import { DatabaseProvider } from '../models/database-provider'
 
 export class JSONDatabaseProvider implements DatabaseProvider {
 
-    protected static singleton: JSONDatabaseProvider = null
+    protected static singleton: JSONDatabaseProvider
     private static readonly STORAGE_FILENAME = '1Kh0H29dexjlUYAu'
 
     private DB: any
