@@ -17,10 +17,6 @@ body {
     padding-top: 4px;
 }
 
-.process-status.processed {
-    color: green;
-}
-
 .process-status.in-progress {
     color: #30acd9;
 }
@@ -35,7 +31,7 @@ body {
 
 .remove-fix-pos {
     position: absolute;
-    top: -5px;
+    top: 6px;
 }
 
 .upload-model {
@@ -59,4 +55,17 @@ body {
 
 .margin-top-10 {
     margin-top: 10px;
+}
+
+.dates {
+    font-size: 10px;
+    color: #999;
+}
+
+.padding-top-11 {
+    padding-top: 11px;
+}
+
+.padding-top-15 {
+    padding-top: 15px;
 }

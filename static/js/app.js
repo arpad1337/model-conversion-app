@@ -197,14 +197,19 @@ function ModelDisplay({ model, onModelRemoval }) {
         <Row className="grid-row">
             <Col xs={7} className="filename">
                 {model.filename} <Badge variant="secondary">{model.format}</Badge>
+                <br />
+                <span className="dates">
+                    Created at: {(new Date(model.createdAt)).toUTCString()},
+                    updated: {(new Date(model.updatedAt)).toUTCString()}
+                </span>
             </Col>
-            <Col xs={2} className={`process-status text-center ${model.status}`}>
+            <Col xs={2} className={`process-status text-center ${model.status} padding-top-11`}>
                 {getModelStatusText(model.status, model.outputFile)}
             </Col>
-            <Col xs={2} className="progress-bar-col">
+            <Col xs={2} className="progress-bar-col padding-top-15">
                 <ProgressBar now={model.progress} />
             </Col>
-            <Col xs={1} className="text-center remove">
+            <Col xs={1} className="text-center remove padding-top-11">
                 <Button
                     className="remove-fix-pos"
                     size="sm"
