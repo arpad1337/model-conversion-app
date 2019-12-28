@@ -95,6 +95,11 @@ export class JSONDatabaseProvider implements DatabaseProvider {
         fs.writeFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`, JSON.stringify(this.DB))
     }
 
+    public clear(): void {
+        this.DB = {}
+        this.commit()
+    }
+
     public static get instance(): JSONDatabaseProvider {
         if (!this.singleton) {
             this.singleton = new JSONDatabaseProvider()

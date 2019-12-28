@@ -9,4 +9,5 @@ export interface DatabaseProvider {
     updateByIdInSchema(key: string, model: HasID): any
     deleteFromSchemaById(key: string, id: string): void
     commit(): void
+    clear(): void
 }
