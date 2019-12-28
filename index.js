@@ -8,6 +8,7 @@ if (require && require.main === module) {
             console.error(err)
             process.exit(1)
         }
+        console.log('Application listening on port', app.port)
     })
 
     const onExit = () => {
