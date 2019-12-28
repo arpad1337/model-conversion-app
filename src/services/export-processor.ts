@@ -1,7 +1,9 @@
 import { EventEmitter } from 'events'
-import { ExportableModel } from './exportable-model'
+import { ExportableModel } from '../models/exportable-model'
 import * as path from 'path'
-import { ProcessProvider, Process, ProcessWrapper } from '../providers/process'
+import { ProcessWrapper } from '../models/process-wrapper'
+import { ProcessProvider } from '../models/process-provider'
+import { ProcessProvider as ProcessProviderGetter } from '../providers/process'
 
 export class ExportProcessorService extends EventEmitter {
 
@@ -77,7 +79,7 @@ export class ExportProcessorService extends EventEmitter {
 
     public static get instance(): ExportProcessorService {
         if (!this.singleton) {
-            const processProvider = ProcessProvider.instance
+            const processProvider = ProcessProviderGetter.instance
             this.singleton = new ExportProcessorService(processProvider)
             this.singleton.startPolling()
         }
