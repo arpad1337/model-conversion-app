@@ -51,7 +51,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
         }
     }
 
-    public pushToSchema(key: string, model: any): any {
+    public pushToSchema(key: string, model: HasID): any {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
