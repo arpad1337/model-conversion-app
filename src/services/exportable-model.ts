@@ -8,7 +8,7 @@ import * as crypto from 'crypto'
 export class ExportableModelService {
 
     protected static singleton: ExportableModelService = null
-    private static readonly COLLECTION_ID = 'files'
+    public static readonly COLLECTION_ID = 'files'
 
     private databaseProvider: DatabaseProvider
 

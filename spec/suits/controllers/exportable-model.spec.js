@@ -104,7 +104,7 @@ describe('ExportableModelController tests', () => {
         exportableModelService.createModel.and.returnValue(returnValue)
 
         formats.forEach((format) => {
-            controller.createNewModel({
+            const request = {
                 files: {
                     inputFile: [{
                         originalFilename: 'test.shapr',
@@ -114,13 +114,23 @@ describe('ExportableModelController tests', () => {
                 fields: {
                     format: [format]
                 }
-            }, response)
+            }
+
+            controller.createNewModel(request, response)
+
+            expect(exportableModelService.createModel).toHaveBeenCalled()
+            expect(exportableModelService.createModel).toHaveBeenCalledWith(
+                request.files.inputFile[0].originalFilename, 
+                request.files.inputFile[0].path, 
+                request.fields.format[0]
+            )
+
+            expect(exportProcessor.scheduleProcessing).toHaveBeenCalled()
+            expect(exportProcessor.scheduleProcessing).toHaveBeenCalledWith(returnValue)
         })
 
-        expect(exportableModelService.createModel).toHaveBeenCalled()
         expect(exportableModelService.createModel).toHaveBeenCalledTimes(4)
 
-        expect(exportProcessor.scheduleProcessing).toHaveBeenCalled()
         expect(exportProcessor.scheduleProcessing).toHaveBeenCalledTimes(4)
 
         expect(response.send).toHaveBeenCalled()
