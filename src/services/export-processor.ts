@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import { ExportableModel } from './exportable-model'
 import * as path from 'path'
-import { ProcessProvider, Process } from '../providers/process'
+import { ProcessProvider, Process, ProcessWrapper } from '../providers/process'
 
 export class ExportProcessorService extends EventEmitter {
 
@@ -9,7 +9,7 @@ export class ExportProcessorService extends EventEmitter {
 
     private processProvider: ProcessProvider
     private processQueue: ExportableModel[]
-    private processes: Map<string, Process>
+    private processes: Map<string, ProcessWrapper>
 
     constructor(processProvider: ProcessProvider) {
         super()
@@ -36,55 +36,42 @@ export class ExportProcessorService extends EventEmitter {
 
     private startProcessing(model: ExportableModel): void {
         const cliPath = path.resolve(__dirname + '/../../node_modules/model-conversion-async');
-        const process = this.processProvider.execFile(
-            cliPath + '/shapr3dconvert',
+        const processWrapper = this.processProvider.createProcess(
+            cliPath,
+            '/shapr3dconvert',
             [
                 `${model.inputFile}`,
                 `--format ${model.format}`,
                 `${path.resolve(__dirname + '/../../static/' + model.outputFile)}`
-            ],
-            {cwd: cliPath}
+            ]
         )
 
-        this.processes.set(model.id, process)
+        this.processes.set(model.id, processWrapper)
 
-        process.on('close', (code) => {
-            if (code === 0) {
-                this.emit('modelProcessed', model)
-                this.terminateProcess(model.id)
-                return
-            }
-            this.emit('modelProcessingFailure', model)
+        processWrapper.on('processingFailure', () => {
+            this.emit('modelProcessingFailure', model);
             this.terminateProcess(model.id)
         })
-        process.stdout.on('data', (fragment: any) => {
-            const data = fragment.toString()
-            if (data.indexOf('###') === 0) {
-                const percent = data.match(/[0-9]+/ig)
-                if (percent) {
-                    this.emit('modelProcessingInProgress', model, percent[0])
-                }
-            }
+
+        processWrapper.on('processingInProgress', (percent: number) => {
+            this.emit('modelProcessingInProgress', model, percent);
         })
-        process.stderr.on('data', () => {
-            this.emit('modelProcessingFailure', model)
-            this.terminateProcess(model.id)
-        })
-        process.on('error', () => {
-            this.emit('modelProcessingFailure', model)
+
+        processWrapper.on('processed', () => {
+            this.emit('modelProcessed', model);
             this.terminateProcess(model.id)
         })
     }
 
     public terminateProcess(id: string): void {
-        const process = this.processes.get(id)
-        process && process.kill() 
+        const processWrapper = this.processes.get(id)
+        processWrapper && processWrapper.kill() 
         this.processes.delete(id)
     }
 
     public onExit(): void {
-        this.processes.forEach((process: Process) => {
-            process && process.kill()
+        this.processes.forEach((processWrapper: ProcessWrapper) => {
+            processWrapper.kill()
         })
     }
 

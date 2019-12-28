@@ -56,9 +56,8 @@ export class ExportableModelService {
             filename: filename,
             createdAt: (new Date()).toISOString(),
             updatedAt: (new Date()).toISOString()
-
         }
-        const newModel = this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model)
+        const newModel = this.databaseProvider.pushToSchema(ExportableModelService.COLLECTION_ID, model) as ExportableModel
         return newModel
     }
 
