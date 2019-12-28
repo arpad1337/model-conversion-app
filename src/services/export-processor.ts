@@ -1,17 +1,7 @@
-import * as processProvider from 'child_process'
 import { EventEmitter } from 'events'
 import { ExportableModel } from './exportable-model'
 import * as path from 'path'
-
-export interface Process extends EventEmitter {
-    stdout: EventEmitter
-    stderr: EventEmitter
-    kill: () => void
-}
-
-export interface ProcessProvider {
-    execFile: (process: string, args?: string[], options?: {cwd: string}) => Process
-}
+import { ProcessProvider, Process } from '../providers/process'
 
 export class ExportProcessorService extends EventEmitter {
 
@@ -100,6 +90,7 @@ export class ExportProcessorService extends EventEmitter {
 
     public static get instance(): ExportProcessorService {
         if (!this.singleton) {
+            const processProvider = ProcessProvider.instance
             this.singleton = new ExportProcessorService(processProvider)
             this.singleton.startPolling()
         }
