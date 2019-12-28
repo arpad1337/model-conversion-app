@@ -39,13 +39,13 @@ export class ExportProcessorService extends EventEmitter {
     private startProcessing(model: ExportableModel): void {
         const cliPath = path.resolve(__dirname + '/../../node_modules/model-conversion-async');
         const processWrapper = this.processProvider.createProcess(
-            cliPath,
             '/shapr3dconvert',
             [
                 `${model.inputFile}`,
                 `--format ${model.format}`,
                 `${path.resolve(__dirname + '/../../static/' + model.outputFile)}`
-            ]
+            ],
+            cliPath
         )
 
         this.processes.set(model.id, processWrapper)
