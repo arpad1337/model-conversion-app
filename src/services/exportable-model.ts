@@ -54,7 +54,7 @@ export class ExportableModelService {
         return this.databaseProvider.updateByIdInSchema(ExportableModelService.COLLECTION_ID, model) as ExportableModel
     }
 
-    public deleteModelByID(id: string): void {
+    public deleteModelById(id: string): void {
         this.databaseProvider.deleteFromSchemaById(ExportableModelService.COLLECTION_ID, id)
     }
 

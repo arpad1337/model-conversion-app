@@ -24,7 +24,7 @@ module.exports = {
             method: 'GET',
             path: '/v1/models/:id',
             controller: 'exportable-model',
-            action: 'getByID'
+            action: 'getById'
         },
         {
             method: 'POST',

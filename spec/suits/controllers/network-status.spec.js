@@ -1,6 +1,6 @@
 const { NetworkStatusController } = require('../../../dist/controllers/network-status')
 
-const response = require('../test-utils/response')
+const responseFactory = require('../test-utils/response-factory')
 
 describe('NetworkStatusController tests', () => {
 
@@ -11,6 +11,7 @@ describe('NetworkStatusController tests', () => {
     })
 
     it('should return reply', () => {
+        const response = responseFactory()
         spyOn(response, 'send')
         spyOn(response, 'end')
 

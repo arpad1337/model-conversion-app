@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as uuid from 'uuid4'
-import { HasID } from '../models/has-id'
+import { HasId } from '../models/has-id'
 import { DatabaseProvider } from '../models/database-provider'
 
 export class JSONDatabaseProvider implements DatabaseProvider {
@@ -51,7 +51,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
         }
     }
 
-    public pushToSchema(key: string, model: HasID): any {
+    public pushToSchema(key: string, model: HasId): any {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
@@ -66,11 +66,11 @@ export class JSONDatabaseProvider implements DatabaseProvider {
         }
     }
 
-    public updateByIdInSchema(key: string, model: HasID): any {
+    public updateByIdInSchema(key: string, model: HasId): any {
         if (!this.DB[key]) {
             throw new Error('Schema not found')
         }
-        const stored = this.DB[key].find((m: any) => m.id === model.id) as HasID
+        const stored = this.DB[key].find((m: any) => m.id === model.id) as HasId
         if (!stored) {
             throw new Error('Model not found')
         }

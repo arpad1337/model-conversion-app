@@ -65,7 +65,7 @@ export class ExportableModelController extends Controller {
         res.end()
     }
 
-    public getByID(req: Request, res: Response): void {
+    public getById(req: Request, res: Response): void {
         const id = req.params.id
         let model = this.exportableModelService.getById(id)
         delete model.inputFile
@@ -108,7 +108,7 @@ export class ExportableModelController extends Controller {
     public deleteModel(req: Request, res: Response): void {
         const id = req.params.id
         this.exportProcessor.terminateProcess(id)
-        this.exportableModelService.deleteModelByID(id)
+        this.exportableModelService.deleteModelById(id)
         res.send({status: true})
         res.end()
     }
