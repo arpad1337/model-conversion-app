@@ -1,9 +1,9 @@
 import { Controller } from './controller'
 import { Request, Response } from 'express'
-import { ExportableModelService } from '../services/exportable-model';
+import { ExportableModelService } from '../services/exportable-model'
 import { ExportableModel } from '../models/exportable-model'
-import { APIError } from '../utils';
-import { ExportProcessorService } from '../services/export-processor';
+import { APIError } from '../utils'
+import { ExportProcessorService } from '../services/export-processor'
 
 export class ExportableModelController extends Controller {
 

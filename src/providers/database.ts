@@ -1,4 +1,4 @@
-import { JSONDatabaseProvider } from "./json-database"
+import { JSONDatabaseProvider } from './json-database'
 import { DatabaseProvider as DatabaseProviderInterface } from '../models/database-provider'
 
 export class DatabaseProvider {

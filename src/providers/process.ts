@@ -1,4 +1,4 @@
-import { ChildProcessProvider } from "./child-process"
+import { ChildProcessProvider } from './child-process'
 import { ProcessProvider as ProcessProviderInterface } from '../models/process-provider'
 
 export class ProcessProvider {
