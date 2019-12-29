@@ -10,7 +10,7 @@ describe('NetworkStatusController tests', () => {
         controller = new NetworkStatusController()
     })
 
-    it('should return reply', () => {
+    it('should return reply on echo', () => {
         const response = responseFactory()
         spyOn(response, 'send')
         spyOn(response, 'end')

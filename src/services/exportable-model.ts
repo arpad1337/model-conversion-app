@@ -28,7 +28,7 @@ export class ExportableModelService {
     }
 
     public getById(id: string): ExportableModel {
-        return this.databaseProvider.getFromSchemaByID(ExportableModelService.COLLECTION_ID, id) as ExportableModel
+        return this.databaseProvider.getFromSchemaById(ExportableModelService.COLLECTION_ID, id) as ExportableModel
     }
 
     public createModel(filename: string, inputFile: string, format: FileFormat): ExportableModel {

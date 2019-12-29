@@ -8,58 +8,67 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     protected static singleton: JSONDatabaseProvider
     private static readonly STORAGE_FILENAME = '1Kh0H29dexjlUYAu'
 
-    private DB: any
+    private _DB: any
 
     constructor() {
-        this.DB = {}
+        this._DB = {}
+    }
+
+    public get DB() {
+        return this._DB
     }
 
     public initialize(): void {
         if (!fs.existsSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)) {
             this.commit()
         }
-        const file = fs.readFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)
+        let file
+        try {
+            file = fs.readFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)
+        } catch(e) {
+            file = "{}"
+        }
         const jsonContents = JSON.parse(file.toString())
-        this.DB = jsonContents || {}
+        this._DB = jsonContents
     }
 
     public isSchemaExists(key: string): boolean {
-        return !!this.DB[key]
+        return !!this._DB[key]
     }
 
     public createSchema(key: string): void {
-        this.DB[key] = []
+        this._DB[key] = []
     }
 
     public getAllFromSchema(key: string): any[] {
-        if (!this.DB[key]) {
+        if (!this._DB[key]) {
             throw new Error('Schema not found')
         }
-        return this.DB[key].concat().map((model: any) => {
+        return this._DB[key].concat().map((model: any) => {
             return {
                 ...model
             }
         })
     }
 
-    public getFromSchemaByID(key: string, id: string): any {
-        if (!this.DB[key]) {
+    public getFromSchemaById(key: string, id: string): any {
+        if (!this._DB[key]) {
             throw new Error('Schema not found')
         }
         return {
-            ...this.DB[key].find((m: any) => m.id === id)
+            ...this._DB[key].find((m: any) => m.id === id)
         }
     }
 
     public pushToSchema(key: string, model: HasId): any {
-        if (!this.DB[key]) {
+        if (!this._DB[key]) {
             throw new Error('Schema not found')
         }
         const copy = {
             ...model
         }
         copy['id'] = uuid()
-        this.DB[key].push(copy)
+        this._DB[key].push(copy)
         this.commit()
         return {
             ...copy
@@ -67,10 +76,10 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public updateByIdInSchema(key: string, model: HasId): any {
-        if (!this.DB[key]) {
+        if (!this._DB[key]) {
             throw new Error('Schema not found')
         }
-        const stored = this.DB[key].find((m: any) => m.id === model.id) as HasId
+        const stored = this._DB[key].find((m: any) => m.id === model.id) as HasId
         if (!stored) {
             throw new Error('Model not found')
         }
@@ -79,25 +88,29 @@ export class JSONDatabaseProvider implements DatabaseProvider {
         }
         stored.updatedAt = (new Date()).toISOString()
         this.commit()
-        return this.getFromSchemaByID(key, model.id)
+        return this.getFromSchemaById(key, model.id)
     }
 
     public deleteFromSchemaById(key: string, id: string): void {
-        if (!this.DB[key]) {
+        if (!this._DB[key]) {
             throw new Error('Schema not found')
         }
-        const index = this.DB[key].findIndex((m: any) => m.id === id)
-        this.DB[key].splice(index, 1)
+        const index = this._DB[key].findIndex((m: any) => m.id === id)
+        this._DB[key].splice(index, 1)
         this.commit()
     }
 
     public commit(): void {
-        fs.writeFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`, JSON.stringify(this.DB))
+        fs.writeFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`, JSON.stringify(this._DB))
     }
 
     public clear(): void {
-        this.DB = {}
-        this.commit()
+        this._DB = {}
+        try {
+            fs.unlinkSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)
+        } catch(e) {
+
+        }
     }
 
     public static get instance(): JSONDatabaseProvider {

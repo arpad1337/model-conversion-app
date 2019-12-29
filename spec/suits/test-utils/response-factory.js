@@ -1,8 +1,6 @@
 module.exports = function() {
     return {
-        send: () => {
-
-        },
+        send: () => {},
         end: () => {}
     }
 }
