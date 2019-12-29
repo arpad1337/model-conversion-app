@@ -1,5 +1,7 @@
 const { JSONDatabaseProvider } = require('../../../dist/providers/json-database')
 
+const { createSpyFromClass } = require('jasmine-auto-spies')
+
 const schema = 'files'
 const schemaNotFoundError = new Error('Schema not found')
 const modelNotFoundError = new Error('Model not found')
@@ -13,12 +15,29 @@ const getTestPropsFromModel = (model) => {
     return copy
 }
 
+class FileSystemProviderMock {
+    existsSync(_) {
+        return false
+    }
+    readFileSync(_) {
+        return {
+            toString: () => {
+                return "{}"
+            }
+        }
+    }
+    writeFileSync(_, _2) {}
+    unlinkSync(_) {}
+}
+
 describe('JSONDatabaseProvider tests', () => {
 
-    let databaseProvider
+    let databaseProvide
+    let fileSystemProvider
 
     beforeEach(() => {
-        databaseProvider = new JSONDatabaseProvider()
+        fileSystemProvider = createSpyFromClass(FileSystemProviderMock)
+        databaseProvider = new JSONDatabaseProvider(fileSystemProvider)
         databaseProvider.clear()
         spyOn(databaseProvider, 'commit')
     })
@@ -29,6 +48,9 @@ describe('JSONDatabaseProvider tests', () => {
 
     it('should initialize', () => {
         databaseProvider.initialize()
+
+        expect(fileSystemProvider.existsSync).toHaveBeenCalled()
+        expect(fileSystemProvider.existsSync).toHaveBeenCalledTimes(1)
 
         expect(databaseProvider.DB).toEqual({})
         expect(databaseProvider.commit).toHaveBeenCalled()

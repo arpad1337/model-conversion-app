@@ -1,7 +1,14 @@
-import * as fs from 'fs'
+import * as fileSystemProvider from 'fs'
 import * as uuid from 'uuid4'
 import { HasId } from '../models/has-id'
 import { DatabaseProvider } from '../models/database-provider'
+
+export interface FileSystemPackage {
+    existsSync(file: string): boolean
+    readFileSync(file: string): { toString(): string }
+    writeFileSync(filename: string, contents: any): void
+    unlinkSync(filename: string): void
+}
 
 export class JSONDatabaseProvider implements DatabaseProvider {
 
@@ -9,8 +16,10 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     private static readonly STORAGE_FILENAME = '1Kh0H29dexjlUYAu'
 
     private _DB: any
+    private fs: FileSystemPackage
 
-    constructor() {
+    constructor(fileSystemProvider: FileSystemPackage) {
+        this.fs = fileSystemProvider
         this._DB = {}
     }
 
@@ -19,16 +28,15 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public initialize(): void {
-        if (!fs.existsSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)) {
+        if (!this.fs.existsSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)) {
             this.commit()
         }
-        let file
+        let jsonContents
         try {
-            file = fs.readFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)
+            jsonContents = JSON.parse(this.fs.readFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`).toString())
         } catch(e) {
-            file = "{}"
+            jsonContents = JSON.parse("{}")
         }
-        const jsonContents = JSON.parse(file.toString())
         this._DB = jsonContents
     }
 
@@ -41,7 +49,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public getAllFromSchema(key: string): any[] {
-        if (!this._DB[key]) {
+        if (!this.isSchemaExists(key)) {
             throw new Error('Schema not found')
         }
         return this._DB[key].concat().map((model: any) => {
@@ -52,7 +60,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public getFromSchemaById(key: string, id: string): any {
-        if (!this._DB[key]) {
+        if (!this.isSchemaExists(key)) {
             throw new Error('Schema not found')
         }
         return {
@@ -61,7 +69,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public pushToSchema(key: string, model: HasId): any {
-        if (!this._DB[key]) {
+        if (!this.isSchemaExists(key)) {
             throw new Error('Schema not found')
         }
         const copy = {
@@ -76,7 +84,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public updateByIdInSchema(key: string, model: HasId): any {
-        if (!this._DB[key]) {
+        if (!this.isSchemaExists(key)) {
             throw new Error('Schema not found')
         }
         const stored = this._DB[key].find((m: any) => m.id === model.id) as HasId
@@ -92,7 +100,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public deleteFromSchemaById(key: string, id: string): void {
-        if (!this._DB[key]) {
+        if (!this.isSchemaExists(key)) {
             throw new Error('Schema not found')
         }
         const index = this._DB[key].findIndex((m: any) => m.id === id)
@@ -101,13 +109,13 @@ export class JSONDatabaseProvider implements DatabaseProvider {
     }
 
     public commit(): void {
-        fs.writeFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`, JSON.stringify(this._DB))
+        this.fs.writeFileSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`, JSON.stringify(this._DB))
     }
 
     public clear(): void {
         this._DB = {}
         try {
-            fs.unlinkSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)
+            this.fs.unlinkSync(`./${JSONDatabaseProvider.STORAGE_FILENAME}.json`)
         } catch(e) {
 
         }
@@ -115,7 +123,7 @@ export class JSONDatabaseProvider implements DatabaseProvider {
 
     public static get instance(): JSONDatabaseProvider {
         if (!this.singleton) {
-            this.singleton = new JSONDatabaseProvider()
+            this.singleton = new JSONDatabaseProvider(fileSystemProvider)
             this.singleton.initialize()
         }
         return this.singleton
