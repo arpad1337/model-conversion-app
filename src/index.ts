@@ -43,10 +43,10 @@ export default class App {
     }
 
     private setup(): void {
-        this.app.use(express.static(this.staticPath))
         this.middlewares.forEach((middleware: string) => {
             this.app.use(middlewareMapping.get(middleware).handle.bind(middlewareMapping.get(middleware)))
         })
+        this.app.use(express.static(this.staticPath))
         this.bindRoutes()
         const errorHandler = new ErrorHandlerMiddleware()
         this.app.use(errorHandler.handle.bind(errorHandler))

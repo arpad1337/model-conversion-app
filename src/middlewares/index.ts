@@ -2,6 +2,7 @@ import { Middleware } from './middleware'
 import { LoggingMiddleware } from './logging'
 import { ExtractIPMiddleware } from './extract-ip'
 import { MultipartParserMiddleware } from './multipart-parser'
+import { CompressionMiddleware } from './compression'
 
 export * from './middleware'
 export * from './logging'
@@ -17,5 +18,8 @@ export const middlewareMapping = new Map<string, Middleware>([
     ],
     [
         'multipart-parser', new MultipartParserMiddleware()
+    ],
+    [
+        'compression', new CompressionMiddleware()
     ]
 ]);
