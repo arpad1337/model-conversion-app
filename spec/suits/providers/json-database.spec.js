@@ -15,7 +15,7 @@ const getTestPropsFromModel = (model) => {
     return copy
 }
 
-class FileSystemProviderMock {
+class FileSystemProviderStub {
     existsSync(_) {
         return false
     }
@@ -36,7 +36,7 @@ describe('JSONDatabaseProvider tests', () => {
     let fileSystemProvider
 
     beforeEach(() => {
-        fileSystemProvider = createSpyFromClass(FileSystemProviderMock)
+        fileSystemProvider = new FileSystemProviderStub()
         databaseProvider = new JSONDatabaseProvider(fileSystemProvider)
         databaseProvider.clear()
         spyOn(databaseProvider, 'commit')
@@ -47,6 +47,8 @@ describe('JSONDatabaseProvider tests', () => {
     })
 
     it('should initialize', () => {
+        spyOn(fileSystemProvider, 'existsSync').and.returnValue(false)
+        
         databaseProvider.initialize()
 
         expect(fileSystemProvider.existsSync).toHaveBeenCalled()
