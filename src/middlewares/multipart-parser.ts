@@ -17,7 +17,7 @@ export class MultipartParserMiddleware implements Middleware {
         });
     }
 
-    public async handle(req: Request, res: Response, next: Function): Promise<void> {
+    public async handle(req: Request, res: Response, next: (error?: Error) => void): Promise<void> {
         try {
             const [fields, files]: [any[], any[]] = await this.promisifyUpload(req)
             req['fields'] = fields

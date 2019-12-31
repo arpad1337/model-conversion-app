@@ -11,7 +11,7 @@ export class CompressionMiddleware implements Middleware {
         return compression.filter(req, res)
       } 
 
-    public handle(req: Request, res: Response, next: Function): void {
+    public handle(req: Request, res: Response, next: (error?: Error) => void): void {
         compression({ threshold: 0, filter: this.shouldCompress })(req, res, next)
     }
 

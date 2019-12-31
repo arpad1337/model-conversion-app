@@ -44,7 +44,10 @@ export default class App {
 
     private setup(): void {
         this.middlewares.forEach((middleware: string) => {
-            this.app.use(middlewareMapping.get(middleware).handle.bind(middlewareMapping.get(middleware)))
+            this.app.use(
+                middlewareMapping.get(middleware).handle
+                    .bind(middlewareMapping.get(middleware))
+            )
         })
         this.app.use(express.static(this.staticPath))
         this.bindRoutes()
@@ -54,11 +57,17 @@ export default class App {
 
     private bindRoutes(): void {
         this.routes.forEach((route: Route) => {
-            let handlers = [controllerMapping.get(route.controller)[route.action].bind(controllerMapping.get(route.controller))];
+            let handlers = [
+                controllerMapping.get(route.controller)[route.action]
+                    .bind(controllerMapping.get(route.controller))
+            ];
             if (route.middlewares) {
                 const middlewares = []
                 route.middlewares.forEach((middleware: string) => {
-                    middlewares.push(middlewareMapping.get(middleware).handle.bind(middlewareMapping.get(middleware)))
+                    middlewares.push(
+                        middlewareMapping.get(middleware).handle
+                            .bind(middlewareMapping.get(middleware))
+                    )
                 })
                 handlers = middlewares.concat(handlers)
             }
