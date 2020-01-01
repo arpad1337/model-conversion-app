@@ -53,6 +53,15 @@ describe('JSONDatabaseProvider tests', () => {
         expect(fileSystemProvider.writeFileSync).toHaveBeenCalledTimes(1)
     })
 
+    it('should call unlinkSync on clear', () => {
+        spyOn(fileSystemProvider, 'unlinkSync')
+        
+        databaseProvider.clear()
+
+        expect(fileSystemProvider.unlinkSync).toHaveBeenCalled()
+        expect(fileSystemProvider.unlinkSync).toHaveBeenCalledTimes(1)
+    })
+
     it('should initialize', () => {
         spyOn(fileSystemProvider, 'existsSync').and.callThrough()
         spyOn(fileSystemProvider, 'readFileSync').and.callThrough()
