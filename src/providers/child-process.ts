@@ -71,6 +71,8 @@ export class ChildProcessProvider extends EventEmitter implements ProcessProvide
     }
 
     public createProcess(executable: string, args?: string[], cwd?: string): ChildProcessWrapper {
+        cwd = cwd || ''
+        args = args || []
         const process = this.childProcessProvider.execFile.call(this.childProcessProvider, cwd + executable, args, {cwd: cwd})
         const processWrapper = new ChildProcessWrapper(process);
         processWrapper.listen()

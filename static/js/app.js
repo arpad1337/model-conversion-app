@@ -202,7 +202,7 @@ function ModelDisplay({ model, onModelRemoval }) {
                 <br />
                 <span className="dates">
                     Created at: {(new Date(model.createdAt)).toUTCString()},
-updated: {(new Date(model.updatedAt)).toUTCString()}
+                    updated: {(new Date(model.updatedAt)).toUTCString()}
                 </span>
             </Col>
             <Col xs={2} className={`process-status text-center ${model.status} padding-top-11`}>
