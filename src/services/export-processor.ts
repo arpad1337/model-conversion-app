@@ -20,7 +20,7 @@ export class ExportProcessorService extends EventEmitter {
         this.processProvider = processProvider
         this.processQueue = []
         this.processes = new Map()
-        this.concurrentProcessesCount = os.cpus().length;
+        this.concurrentProcessesCount = os.cpus().length - 1 || 1;
     }
 
     public scheduleProcessing(model: ExportableModel): void {
