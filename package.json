@@ -23,7 +23,7 @@
     "@types/express": "^4.17.2",
     "@types/node": "^13.1.1",
     "compression": "^1.7.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "model-conversion-async": "git+https://github.com/arpad1337/model-conversion-async.git",
     "multiparty": "^4.2.1",
     "request-ip": "^2.1.3",
